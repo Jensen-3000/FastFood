@@ -9,7 +9,7 @@ export const menuView = {
     const container = document.getElementById(containerId);
 
     menuData[category].forEach((item) => {
-      const card = menuView.createCard(item);
+      const card = constructHTML.createCard(item);
       container.appendChild(card);
     });
   },
@@ -18,10 +18,54 @@ export const menuView = {
   renderCart: function () {
     const cartContainer = document.getElementById("cart");
 
-    const cart = menuView.createCart();
+    const cart = constructHTML.createCart();
     cartContainer.appendChild(cart);
   },
+  updateCart: function () {
+    updateHTML.updateCart();
+  },
+  updateTotalRevenue: function () {
+    updateHTML.updateTotalRevenue();
+  },
+};
 
+const updateHTML = {
+  // Updates the cart in the DOM
+  updateCart: function () {
+    const cartItemsElement = document.getElementById("cart-items");
+    cartItemsElement.innerHTML = "";
+    menuModel.cart.total = 0;
+
+    menuModel.cart.items.forEach((item, index) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = `${item.name} - ${item.price.toFixed(2)} kr.`;
+
+      const removeButton = document.createElement("button");
+      removeButton.textContent = "X";
+      removeButton.onclick = () => menuController.removeFromCart(index);
+
+      listItem.appendChild(removeButton);
+      cartItemsElement.appendChild(listItem);
+
+      menuModel.cart.total += parseFloat(item.price);
+    });
+    document.getElementById("cart-total").textContent =
+      menuModel.cart.total.toFixed(2) + " kr.";
+  },
+
+  // Updates the total revenue in the DOM
+  updateTotalRevenue: function () {
+    const orderNumber = document.getElementById("order-number");
+    orderNumber.textContent = parseInt(orderNumber.textContent) + 1;
+
+    const totalRevenue = document.getElementById("total-revenue");
+    totalRevenue.textContent = `${(
+      parseFloat(totalRevenue.textContent) + menuModel.cart.total
+    ).toFixed(2)} kr.`;
+  },
+};
+
+const constructHTML = {
   // Creates the layout for a card, used for menu items
   createCard: function (item) {
     const card = document.createElement("div");
@@ -78,28 +122,5 @@ export const menuView = {
     cart.appendChild(confirmOrderButton);
 
     return cart;
-  },
-
-  // Updates the cart in the DOM
-  updateCart: function () {
-    const cartItemsElement = document.getElementById("cart-items");
-    cartItemsElement.innerHTML = "";
-    menuModel.cart.total = 0;
-
-    menuModel.cart.items.forEach((item, index) => {
-      const listItem = document.createElement("li");
-      listItem.textContent = `${item.name} - ${item.price.toFixed(2)} kr.`;
-
-      const removeButton = document.createElement("button");
-      removeButton.textContent = "X";
-      removeButton.onclick = () => menuController.removeFromCart(index);
-
-      listItem.appendChild(removeButton);
-      cartItemsElement.appendChild(listItem);
-
-      menuModel.cart.total += parseFloat(item.price);
-    });
-    document.getElementById("cart-total").textContent =
-      menuModel.cart.total.toFixed(2) + " kr.";
   },
 };
