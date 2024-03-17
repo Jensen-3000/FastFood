@@ -1,0 +1,29 @@
+/* Grid CSS */
+.header {
+  grid-area: header;
+
+  background-color: #f8f8f8;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.main {
+  grid-area: main;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.sidebar {
+  grid-area: right;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "main right";
+  gap: 10px;
+  padding: 10px;
+}
