@@ -5,6 +5,7 @@
   background-color: #f8f8f8;
   text-align: center;
   padding: 20px 0;
+  border-radius: 10px;
 }
 
 .main {
@@ -16,14 +17,26 @@
 }
 
 .sidebar {
-  grid-area: right;
+  grid-area: sidebar;
 }
 
 .grid-container {
   display: grid;
   grid-template-areas:
-    "header header"
-    "main right";
+    "header sidebar"
+    "main sidebar";
   gap: 10px;
   padding: 10px;
+}
+
+@media (max-width: 1000px) {
+  .grid-container {
+    grid-template-areas:
+      "header"
+      "sidebar"
+      "main";
+  }
+  .grid-container{
+    padding: 0;
+  }
 }
